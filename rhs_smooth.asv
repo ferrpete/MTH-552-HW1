@@ -1,0 +1,20 @@
+% rhs_smooth.m
+% Peter Ferrero, Oregon State University, 1/9/2018
+% Defines the right-hand side of the ODE for Assignment 1, Problem 2.  This
+% version is unsmoothed.
+
+function [rhs] = rhs_smooth(tstep, epsilon, j, tau)
+
+    if tstep >= j*tau && tstep < (j + 0.5)*tau
+
+        t = (tstep - j*tau - tau/4);
+        rhs = exp(-(1./(1-t^epsilon)));
+
+    else
+        
+        t = tstep - (j + 0.5)*tau;
+        rhs = -exp(-(1./(1-t^epsilon)));
+
+    end
+
+end
