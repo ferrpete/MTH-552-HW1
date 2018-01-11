@@ -3,17 +3,32 @@
 % Defines the right-hand side of the ODE for Assignment 1, Problem 2.  This
 % version is unsmoothed.
 
-function [rhs] = rhs_smooth(tstep, epsilon, j, tau)
+function [rhs] = rhs_smooth(tstep,y, tau, epsilon)
 
-    if tstep >= j*tau && tstep < (j + 0.5)*tau
+    j = floor(tstep);
 
-        t = (4/tau)*(tstep - j*tau - tau/4);
-        rhs = 2.718281828459045*exp(-(1./(1-t^epsilon)));
+    if tstep < j*tau + epsilon
+        
+        t = tstep - j*tau;
+        rhs = 1.000000004122307*tanh(10*t/epsilon);
 
+    elseif tstep >= j*tau + epsilon && tstep < (j + 0.5)*tau - epsilon
+        
+        rhs = 1;
+
+    elseif tstep >= (j + 0.5)*tau + epsilon && tstep < (j + 1)*tau - epsilon
+        
+        rhs = -1;
+        
+    elseif tstep >= (j+1)*tau - epsilon
+        
+        t = tstep - (j+1)*tau;
+        rhs = 1.000000004122307*tanh(10*t/epsilon);
+        
     else
         
-        t = (4/tau)*(tstep - j*tau - (3/4)*tau);
-        rhs = -2.718281828459045*exp(-(1./(1-t^epsilon)));
+        t = tstep - (j + 0.5)*tau;
+        rhs = 1.000000004122307*tanh(-10*t/epsilon);
 
     end
 

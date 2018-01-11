@@ -3,7 +3,9 @@
 % Defines the right-hand side of the ODE for Assignment 1, Problem 2.  This
 % version is unsmoothed.
 
-function [rhs] = rhs_nonsmooth(tstep, j, tau)
+function [rhs] = rhs_nonsmooth(tstep, tau)
+
+    j = floor(tstep);
 
     if tstep >= j*tau && tstep < (j + 0.5)*tau
 

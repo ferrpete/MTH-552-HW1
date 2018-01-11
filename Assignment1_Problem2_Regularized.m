@@ -4,10 +4,10 @@
 % solving an ODE with a non-smooth RHS followed by mollification to
 % smoothen RHS.
 
-function [error] = Assignment1_Problem2(k)
+function [error] = Assignment1_Problem2_Regularized(k, epsilon)
 
 tau = 1;
-T = tau/4;
+T = 5*tau;
 h = T/k;
 tsteps = [0:h:T]';
 n = length(tsteps);
@@ -18,15 +18,18 @@ rhs = zeros(n-1,1);
 
 for i=2:n
     
-    rhs(i-1) = rhs_nonsmooth(tsteps(i-1), tau);
+    rhs(i-1) = rhs_smooth(tsteps(i-1),uh, tau, epsilon);
     uh(i) = uh(i-1) + h*rhs(i-1);
     
 end
 
-uexact = 0.25.*sawtooth(2*pi*tsteps, 0.5)+0.25;
+options = odeset('RelTol',1e-8);
+
+[t,uexact] = ode45(@(t,uexact) rhs_smooth(t,uexact, tau, epsilon),...
+    [tsteps],uh(1),options); 
 
 figure(1)
-plot(tsteps, uh, 'k-', tsteps, uexact, 'r--')
+plot(tsteps, uh, 'k-', t, uexact, 'r--')
 figure(2)
 plot(tsteps(1:n-1), rhs, 'b-')
 
