@@ -9,25 +9,25 @@ function [rhs] = rhs_smooth(tstep,y, tau, epsilon)
 
     if tstep < j*tau + epsilon
         
-        t = tstep - j*tau;
-        rhs = 1.000000004122307*tanh(10*t/epsilon);
+        t = tstep - j*tau; % Scale t to [0,epsilon)
+        rhs = 1.000000004122307*tanh(10*t/epsilon); % Smoothing function.  Slope matches approximately with original RHS.
 
     elseif tstep >= j*tau + epsilon && tstep < (j + 0.5)*tau - epsilon
         
-        rhs = 1;
+        rhs = 1; % Original RHS outside of smoothed region
 
     elseif tstep >= (j + 0.5)*tau + epsilon && tstep < (j + 1)*tau - epsilon
         
-        rhs = -1;
+        rhs = -1; % Original RHS outside of smoothed region
         
     elseif tstep >= (j+1)*tau - epsilon
         
-        t = tstep - (j+1)*tau;
+        t = tstep - (j+1)*tau; % Scale t to [-epsilon, epsilon]
         rhs = 1.000000004122307*tanh(10*t/epsilon);
         
     else
         
-        t = tstep - (j + 0.5)*tau;
+        t = tstep - (j + 0.5)*tau; % Scale t to [-epsilon, epsilon)
         rhs = 1.000000004122307*tanh(-10*t/epsilon);
 
     end
